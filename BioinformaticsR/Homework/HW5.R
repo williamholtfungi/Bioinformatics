@@ -45,9 +45,9 @@ myFirstAlignment
 print(myFirstAlignment, show="complete")
 
 ####Function to count gaps in a consensus ####
-count_gaps <- function(sequence) {
+count_gaps <- function(consensus) {
   #Search for the presence of "-" in the sequence
-  gap_positions <- grepl("-", sequence)
+  gap_positions <- grepl("-", consensus)
   
   #Count the number of TRUE values (i.e., gaps)
   num_gaps <- sum(gap_positions)
@@ -123,3 +123,5 @@ write.phyDat(Alignment_phyDat, "alignment.fasta", format = "fasta")
 
 
 
+
+rm(list = ls())
