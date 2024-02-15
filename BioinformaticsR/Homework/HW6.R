@@ -19,88 +19,83 @@ library(protti)
 library(r3dmol)
 
 
-#Set Working directory for Data and Homework folder ####
+#Setting the Working Directory####
 #setwd("Bioinformatics/")
 #setwd("Data/")
 #setwd("Homework06/")
 
-#Checked that directory was in place ####
+#Directory Check####
 getwd()
 
 mySequences01 <- readDNAStringSet("sequence01.fasta")
 mySequences01
 
-#3. Translate DNA sequence into AA sequence ####
+#Translating DNA into AA ####
 aa_sequence <- Biostrings::translate(mySequences01)
 aa_sequence
 as.character(aa_sequence)
 
-# Writing a aa sequence into a fasta file
+#AA Sequence to a FASTA file
 output_file <- "amino_acid_sequence.fasta"
 writeXStringSet(aa_sequence, file = output_file,
                 format = "fasta", width = 60)
 
-#4. Read this file into R using the appropriate function ####
+#4.Putting the Accession Numbers into R ####
 accession_numbers<- read.table("Accession5.txt")
 
-#5. Sample list of accession numbers ####
+#5.List of Accession numbers ####
 accession_numbers <- c("O78681", "I3PAK4", "A0A0F7H0C5", "A0A0F7H0D2", "Q85DY2")
 
-# Convert the list to a character string
+# Converting it into a character string
 accession_string <- paste(accession_numbers, collapse = ",")
 
-# Print the formatted string
+# Print/look at the string
 print(accession_string)
 
-#6. Reading accession numbers into GetProteinGOInfo ####
+#6. Reading accession numbers into the GO format ####
 AccessionNumbersGO <- GetProteinGOInfo(accession_numbers)
 str(AccessionNumbersGO)
 #write.csv(AccessionNumbersGO, "AccessionNumbersGO.csv", row.names = FALSE)
 
-#7. Extract GO terms and their counts from AccessionNumbersGO ####
+#7. Extract GO from AccessionNumbersGO ####
 View(AccessionNumbersGO)
 df <-- read.csv(AccessionNumbersGO.csv)
-#PlotGoInfo(AccessionNumbersGO) #--> Did not work
+#PlotGoInfo(AccessionNumbersGO) did not work for me
 go_terms <- unlist(strsplit(AccessionNumbersGO$Gene.Ontology..GO., ";"))
 go_terms <- gsub("\\[.*?\\]", "", go_terms)  # Remove GO IDs from GO terms
 
-# Create a data frame with GO terms and their counts
+# Creating a DF with GO terms and counts
 go_counts <- data.frame(GoTerm = go_terms, Count = rep(1, length(go_terms)))
 
-# Summarize the counts for each GO term
+# Count summary from each GO term
 go_counts <- aggregate(Count ~ GoTerm, go_counts, sum)
 
-# Plot the GO information
+# Plot GO
 barplot(go_counts$Count, names.arg = go_counts$GoTerm,
         xlab = "GO Terms", ylab = "Count", main = "GO Term Distribution")
 
-#10. Use GetPathology_Biotech() and Get.diseases() to find information on any diseases or pathologies associated with your gene ####
+#Finding associated diseases or pathologies of the gene####
 GetPathology_Biotech(accession_numbers)
 #NA on all counts
 Get.diseases(accession_numbers)
 #Error
 
 
-#11. We are going to access structural information using the protti package ####
+#Structure using Protti####
+
+
+#This point onwards di not work for me
+#Protti would not load saying it is using a previous version of R
+
 
 viewtibble <-fetch_uniprot(accession_numbers)
 View(viewtibble)
 
-#12. Pull any available structural information from the Protein DataBase
-fetch_pdb("1ZMR")
-#pdb_ids auth_asym_id label_asym_id reference_database_accession protein_name 
-#<chr>   <chr>        <chr>       <chr>       <chr>        
-#1ZMR    A            A           P0A799   Phosphoglyce…
-fetch_pdb("2HWG")
-#pdb_ids auth_asym_id label_asym_id reference_database_accession protein_name 
-#<chr>   <chr>        <chr>           <chr>                        <chr>        
-#1 2HWG    A            A             P08839                       Phosphoenolp…
-#2 2HWG    A            A             P08839                       Phosphoenolp…
-#3 2HWG    B            B             P08839                       Phosphoenolp…
-#4 2HWG    B            B             P08839                       Phosphoenolp…
+#Looking for available structure info from Protein DataBase
+#fetch_pdb("Accession Number")
 
 
-#13. Get information on any available 3D structures for your gene
+#Get Proposed 3D Structure of protein
 fetch_alphafold_prediction(accession_numbers)
 
 
