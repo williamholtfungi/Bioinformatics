@@ -17,7 +17,13 @@ install.packages("r3dmol")
 library(UniprotR)
 library(protti)
 library(r3dmol)
+library(snakecase)
 
+remotes::install_github("Tazinho/snakecase")
+#load Packages####
+#pacman::p_load(pacman, tidyverse, BiocManager, Biostrings, GenomicAlignments, UniprotR, protti, r3dmol, seqinr,phangorn, genepop, tidyr, ape, dplyr)
+
+install.packages("protti", dependencies = TRUE)
 
 #Setting the Working Directory####
 #setwd("Bioinformatics/")
@@ -84,25 +90,18 @@ Get.diseases(accession_numbers)
 #Structure using Protti####
 
 
-#This point onwards di not work for me
+#This point onwards did not work for me
 #Protti would not load saying it is using a previous version of R
 
 
-viewtibble <-fetch_uniprot(accession_numbers)
+viewtibble <-protti::fetch_uniprot(accession_numbers)
 View(viewtibble)
 
 #Looking for available structure info from Protein DataBase
 #fetch_pdb("Accession Number")
 
 
-#Get Proposed 3D Structure of protein
+#Get Proposed 3D Structure of protti
 fetch_alphafold_prediction(accession_numbers)
-
-
-
-
-
-
-
 
 
